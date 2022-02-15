@@ -1,6 +1,6 @@
 #include <ESP8266WiFi.h>
 #include "Arduino.h"      
-#define MainPeriod 5000
+#define MainPeriod 6000
 
 long previousMillis = 0; 
 volatile unsigned long duration=0; 
@@ -106,12 +106,7 @@ class comm {
     while(available == 0) {
       if(client.available() || (millis() >= timer + 15000)) {
         available = 1;
-        while(client.available()){
-          failCount = 0;
-          String line = client.readStringUntil('\r');
-          Serial.println(line);
-          Serial.println();
-        };
+
       };
     };
     return 0;
@@ -123,8 +118,8 @@ comm cc = comm();
 void setup(){
   Serial.begin(9600);
   delay(100);
-  attachInterrupt(digitalPinToInterrupt(14), myinthandler, RISING);
   cc.connect();
+  attachInterrupt(digitalPinToInterrupt(14), myinthandler, RISING);
   Serial.println("end setup.");
 }
  
@@ -139,15 +134,12 @@ void loop(){
     pulsecount = 0;
     Freq = 1e6 / float(_duration);    
     Freq *= _pulsecount;
-    Freq = Freq / 2;
     Serial.println(Freq);
     cc.push();
-    delay(500);
   }  
 }
 
 void myinthandler(){
-  Serial.println("int received");
   unsigned long currentMicros = micros();
   duration += currentMicros - previousMicros;
   previousMicros = currentMicros;
