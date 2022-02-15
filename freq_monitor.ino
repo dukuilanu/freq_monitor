@@ -1,6 +1,6 @@
 #include <ESP8266WiFi.h>
 #include "Arduino.h"      
-#define MainPeriod 6000
+#define MainPeriod 5000
 
 long previousMillis = 0; 
 volatile unsigned long duration=0; 
@@ -126,6 +126,7 @@ void setup(){
 void loop(){
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= MainPeriod){
+    detachInterrupt(digitalPinToInterrupt(14));
     previousMillis = currentMillis;   
     // need to bufferize to avoid glitches
     unsigned long _duration = duration;
@@ -136,6 +137,7 @@ void loop(){
     Freq *= _pulsecount;
     Serial.println(Freq);
     cc.push();
+    attachInterrupt(digitalPinToInterrupt(14), myinthandler, RISING);
   }  
 }
 
