@@ -120,13 +120,12 @@ void setup(){
   delay(100);
   cc.connect();
   attachInterrupt(digitalPinToInterrupt(14), myinthandler, RISING);
-  Serial.println("end setup.");
 }
  
 void loop(){
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= MainPeriod){
-    detachInterrupt(digitalPinToInterrupt(14));
+    //detachInterrupt(digitalPinToInterrupt(14));
     previousMillis = currentMillis;   
     // need to bufferize to avoid glitches
     unsigned long _duration = duration;
@@ -137,7 +136,7 @@ void loop(){
     Freq *= _pulsecount;
     Serial.println(Freq);
     cc.push();
-    attachInterrupt(digitalPinToInterrupt(14), myinthandler, RISING);
+    //attachInterrupt(digitalPinToInterrupt(14), myinthandler, RISING);
   }  
 }
 
